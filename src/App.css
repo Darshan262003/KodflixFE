@@ -606,6 +606,21 @@ body {
   text-decoration: underline;
 }
 
+.link-button {
+  background: none;
+  border: none;
+  color: #e50914;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+.link-button:hover {
+  text-decoration: underline;
+}
+
 .error-message {
   background-color: rgba(255, 0, 0, 0.2);
   color: #ff6b6b;
