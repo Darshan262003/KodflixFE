@@ -20,9 +20,11 @@ const api = {
       console.log('Response status:', response.status);
       
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         console.error('Registration error response:', errorData);
-        throw new Error(errorData.message || errorData.error || 'Registration failed');
+        // Extract error message from various possible fields
+        const errorMessage = errorData.message || errorData.error || errorData.msg || JSON.stringify(errorData) || 'Registration failed';
+        throw new Error(errorMessage);
       }
       
       const result = await response.json();
@@ -45,9 +47,11 @@ const api = {
       console.log('Login response status:', response.status);
       
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         console.error('Login error response:', errorData);
-        throw new Error(errorData.message || errorData.error || 'Login failed');
+        // Extract error message from various possible fields
+        const errorMessage = errorData.message || errorData.error || errorData.msg || JSON.stringify(errorData) || 'Login failed';
+        throw new Error(errorMessage);
       }
       
       const result = await response.json();
