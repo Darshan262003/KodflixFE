@@ -92,7 +92,18 @@ const Signup = () => {
         navigate('/login');
       }, 2000);
     } catch (err) {
-      setErrors({ general: err.message || 'Registration failed. Please try again.' });
+      // Handle specific error responses from backend
+      if (err.message.includes('phone') || err.message.toLowerCase().includes('number')) {
+        setErrors({ phoneNumber: err.message });
+      } else if (err.message.includes('email')) {
+        setErrors({ email: err.message });
+      } else if (err.message.includes('username')) {
+        setErrors({ username: err.message });
+      } else if (err.message.includes('password')) {
+        setErrors({ password: err.message });
+      } else {
+        setErrors({ general: err.message || 'Registration failed. Please try again.' });
+      }
     }
   };
 
