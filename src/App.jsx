@@ -4,6 +4,7 @@ import axios from 'axios'
 import './App.css'
 import Signup from './components/Auth/Signup'
 import Login from './components/Auth/Login'
+import api from './services/api'
 
 function App() {
   const [movies, setMovies] = useState([])
@@ -15,7 +16,7 @@ function App() {
   const [hasMore, setHasMore] = useState(true)
 
   // Check if user is authenticated
-  const isAuthenticated = !!localStorage.getItem('jwtToken');
+  const isAuthenticated = api.isAuthenticated();
 
   const API_KEY = '6913b556'
   const BASE_URL = 'https://www.omdbapi.com/'

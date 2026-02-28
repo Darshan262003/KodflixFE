@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../services/api';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -71,23 +71,19 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post('/register', {
+      const response = await api.auth.register({
         username: formData.username,
         email: formData.email,
         password: formData.password
       });
 
-      if (response.status === 200 || response.status === 201) {
-        setSuccess(true);
-        setErrors({});
-        setTimeout(() => {
-          navigate('/login');
-        }, 2000);
-      } else {
-        setErrors({ general: 'Registration failed. Please try again.' });
-      }
+      setSuccess(true);
+      setErrors({});
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (err) {
-      setErrors({ general: err.response?.data?.message || 'Registration failed. Please try again.' });
+      setErrors({ general: err.message || 'Registration failed. Please try again.' });
     }
   };
 
@@ -154,7 +150,7 @@ const Signup = () => {
         </form>
         
         <p className="auth-link">
-          Already have an account? <a href="/login">Log in</a>
+          Already have an account? <button className="link-button" onClick={() => navigate('/login')}>Log in</button>
         </p>
       </div>
     </div>

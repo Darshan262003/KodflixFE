@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../services/api';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -54,27 +54,21 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post('/login', {
+      const response = await api.auth.login({
         email: formData.email,
         password: formData.password
       });
 
-      if (response.status === 200) {
-        // Store JWT token in localStorage or sessionStorage
-        const token = response.data.token || response.headers.authorization || response.data.jwt;
-        if (token) {
-          localStorage.setItem('jwtToken', token);
-          // Set authorization header for future requests
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        }
-        
-        // Navigate to main app
-        navigate('/');
-      } else {
-        setErrors({ general: 'Login failed. Please try again.' });
+      // Store JWT token
+      const token = response.token || response.data?.token || response.jwt;
+      if (token) {
+        api.setAuthToken(token);
       }
+      
+      // Navigate to main app
+      navigate('/');
     } catch (err) {
-      setErrors({ general: err.response?.data?.message || 'Invalid credentials. Please try again.' });
+      setErrors({ general: err.message || 'Invalid credentials. Please try again.' });
     }
   };
 
@@ -116,7 +110,7 @@ const Login = () => {
         </form>
         
         <p className="auth-link">
-          Don't have an account? <a href="/signup">Sign up</a>
+          Don't have an account? <button className="link-button" onClick={() => navigate('/signup')}>Sign up</button>
         </p>
       </div>
     </div>
