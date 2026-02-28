@@ -1,5 +1,5 @@
 // API service for backend communication
-const API_BASE_URL = 'https://kodflix-fe-ectn.vercel.app';
+const API_BASE_URL = 'https://kodflix-be.vercel.app';
 
 // Create axios instance with base configuration
 const api = {
