@@ -80,10 +80,9 @@ const Signup = () => {
 
     try {
       const response = await api.auth.register({
-        username: formData.username,
+        uname: formData.username,           // Backend expects 'uname' instead of 'username'
         email: formData.email,
-        phone: formData.phoneNumber, // Backend might expect 'phone' instead of 'phoneNumber'
-        phoneNumber: formData.phoneNumber, // Send both to cover different backend expectations
+        phn: formData.phoneNumber,          // Backend expects 'phn' instead of 'phone' or 'phoneNumber'
         password: formData.password
       });
 
