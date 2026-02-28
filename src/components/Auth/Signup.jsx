@@ -6,6 +6,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
+    phoneNumber: '',
     password: '',
     confirmPassword: ''
   });
@@ -15,12 +16,12 @@ const Signup = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Validate username is not empty
     if (!formData.username.trim()) {
       newErrors.username = 'Username is required';
     }
-    
+
     // Validate email format
     const emailRegex = /^[\w+.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
     if (!formData.email.trim()) {
@@ -28,21 +29,28 @@ const Signup = () => {
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    
+
+    // Validate phone number
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = 'Phone number is required';
+    } else if (!/^\d{10}$/.test(formData.phoneNumber.replace(/[-()\s+]/g, ''))) {
+      newErrors.phoneNumber = 'Please enter a valid 10-digit phone number';
+    }
+
     // Validate password
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-    
+
     // Validate password match
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -52,7 +60,7 @@ const Signup = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    
+
     // Clear error for the field being edited
     if (errors[e.target.name]) {
       setErrors({
@@ -74,6 +82,7 @@ const Signup = () => {
       const response = await api.auth.register({
         username: formData.username,
         email: formData.email,
+        phoneNumber: formData.phoneNumber,
         password: formData.password
       });
 
@@ -91,12 +100,13 @@ const Signup = () => {
     <div className="auth-container">
       <div className="auth-form">
         <h2 className="auth-title">Sign Up</h2>
-        
+
         {errors.general && <div className="error-message">{errors.general}</div>}
         {success && <div className="success-message">Registration successful! Redirecting to login...</div>}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
+            <label style={{ display: 'block', marginBottom: '8px', color: '#fff', fontSize: '14px', textAlign: 'left' }}>Username</label>
             <input
               type="text"
               name="username"
@@ -107,8 +117,9 @@ const Signup = () => {
             />
             {errors.username && <div className="field-error">{errors.username}</div>}
           </div>
-          
+
           <div className="form-group">
+            <label style={{ display: 'block', marginBottom: '8px', color: '#fff', fontSize: '14px', textAlign: 'left' }}>Email</label>
             <input
               type="email"
               name="email"
@@ -119,8 +130,22 @@ const Signup = () => {
             />
             {errors.email && <div className="field-error">{errors.email}</div>}
           </div>
-          
+
           <div className="form-group">
+            <label style={{ display: 'block', marginBottom: '8px', color: '#fff', fontSize: '14px', textAlign: 'left' }}>Phone Number</label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              className={`auth-input ${errors.phoneNumber ? 'input-error' : ''}`}
+            />
+            {errors.phoneNumber && <div className="field-error">{errors.phoneNumber}</div>}
+          </div>
+
+          <div className="form-group">
+            <label style={{ display: 'block', marginBottom: '8px', color: '#fff', fontSize: '14px', textAlign: 'left' }}>Password</label>
             <input
               type="password"
               name="password"
@@ -131,8 +156,9 @@ const Signup = () => {
             />
             {errors.password && <div className="field-error">{errors.password}</div>}
           </div>
-          
+
           <div className="form-group">
+            <label style={{ display: 'block', marginBottom: '8px', color: '#fff', fontSize: '14px', textAlign: 'left' }}>Confirm Password</label>
             <input
               type="password"
               name="confirmPassword"
@@ -143,12 +169,12 @@ const Signup = () => {
             />
             {errors.confirmPassword && <div className="field-error">{errors.confirmPassword}</div>}
           </div>
-          
+
           <button type="submit" className="auth-button">
             Sign Up
           </button>
         </form>
-        
+
         <p className="auth-link">
           Already have an account? <button className="link-button" onClick={() => navigate('/login')}>Log in</button>
         </p>
