@@ -15,8 +15,7 @@ function App() {
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
 
-  // Check if user is authenticated
-  const isAuthenticated = api.isAuthenticated();
+  const [isAuthenticated, setIsAuthenticated] = useState(api.isAuthenticated());
 
   const API_KEY = '6913b556'
   const BASE_URL = 'https://www.omdbapi.com/'
@@ -255,6 +254,15 @@ function App() {
             />
             <button type="submit" className="search-button">Search</button>
           </form>
+          <button 
+            onClick={() => {
+              api.setAuthToken(null);
+              setIsAuthenticated(false);
+            }}
+            className="logout-button"
+          >
+            Logout
+          </button>
         </div>
       </nav>
 
@@ -373,8 +381,8 @@ function App() {
     <Router>
       <Routes>
         {/* Public routes - for unauthenticated users */}
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup onLoginSuccess={() => setIsAuthenticated(true)} />} />
+        <Route path="/login" element={<Login onLoginSuccess={() => setIsAuthenticated(true)} />} />
         
         {/* Protected route - redirects to login if not authenticated */}
         <Route 

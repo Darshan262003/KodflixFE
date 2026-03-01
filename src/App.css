@@ -41,6 +41,8 @@ body {
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .logo {
@@ -91,6 +93,23 @@ body {
 
 .search-button:hover {
   background: #f40612;
+}
+
+.logout-button {
+  padding: 10px 20px;
+  background: #333;
+  color: white;
+  border: 1px solid #666;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 15px;
+}
+
+.logout-button:hover {
+  background: #444;
+  border-color: #888;
 }
 
 /* Hero Section - Netflix Style */

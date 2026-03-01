@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -65,7 +65,10 @@ const Login = () => {
         api.setAuthToken(token);
       }
       
-      // Navigate to main app
+      // Update authentication state and navigate to main app
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
       navigate('/');
     } catch (err) {
       setErrors({ general: err.message || 'Invalid credentials. Please try again.' });
